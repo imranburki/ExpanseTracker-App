@@ -1,11 +1,11 @@
 // JavaScript source code
 import React, { useContext } from 'react';
-import Balance from './Balance.js';
-import { username, userid } from '../App';
+//import Balance from './Balance.js';
+// import { username, userid } from '../App';
 
 function Header() {
-    const name = useContext(username);
-    const id = useContext(userid);
+    // const name = useContext(username);
+    // const id = useContext(userid);
     return (
         <div>
             <h1>Expance Tracker</h1>
