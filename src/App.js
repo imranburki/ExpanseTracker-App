@@ -1,7 +1,7 @@
 
 import './customCss.css';
 import React, {createContext } from 'react';
-import Counter from './components/Counter1.js';
+// import Counter from './components/Counter1.js';
 import Header from './components/Header.js';
 import Balance from  './components/Balance.js'
 import IncomeExpances from './components/IncomeExpances';
