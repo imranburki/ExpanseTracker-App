@@ -1,6 +1,6 @@
 // JavaScript source code
 import React,{useContext} from 'react';
-import { username, userid } from '../App';
+// import { username, userid } from '../App';
 import { GlobalContext } from '../context/GlobalState';
 
 function Balance() {
