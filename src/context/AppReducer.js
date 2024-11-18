@@ -27,9 +27,24 @@ const appReducer = (state, action) => {
                 ...state,
                 transactions: [action.payload, ...state.transactions]
             }
-        default:
-            return state;
-    }
-};
+            case 'LOGIN_USER':
+                return {
+                  ...state,
+                  user: action.payload,
+                };
+              case 'LOGOUT_USER':
+                return {
+                  ...state,
+                  user: null,
+                };
+              case 'REGISTER_USER':
+                return {
+                  ...state,
+                  user: action.payload,
+                };
+              default:
+                return state;
+            }
+          };
 
 export default appReducer;
