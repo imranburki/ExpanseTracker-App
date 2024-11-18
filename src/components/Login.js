@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
+import { Link } from 'react-router-dom';
 import './Login.css'; // Add this CSS file for styling
 
 export default function Login({ setLoggedIn }) {
@@ -52,6 +53,12 @@ export default function Login({ setLoggedIn }) {
             Login
           </button>
         </form>
+        <p className="signup-link">
+          Don't have an account?{' '}
+          <Link to="/signup" className="link">
+            Sign up here
+          </Link>
+        </p>
       </div>
     </div>
   );

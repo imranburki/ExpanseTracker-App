@@ -1,30 +1,70 @@
-// JavaScript source code
-//import React, { useContext } from 'react';
-import React from "react";
-//import Balance from './Balance.js';
-// import { username, userid } from '../App';
+import * as React from 'react';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box } from '@mui/material';
 
-function Header() {
-    // const name = useContext(username);
-    // const id = useContext(userid);
-    return (
-        <div>
-            <h1>Expance Tracker</h1>
-            
-            {/* <h2>i am using usecontext</h2>
-            <Balance />
-            <h3>Now using useContext</h3>
-            <table>
-                <tr>
-                <th>User ID</th>
-                    <th>userName</th>
-                </tr>
-                <tr>
-                    <td>    {name}</td>
-                    <td>{id}</td>
-                </tr>
-            </table> */}
-            </div>
-        );
+const options = ['Profile', 'Setting', 'Logout'];
+
+const ITEM_HEIGHT = 48;
+
+export default function LongMenu() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+      <IconButton
+        aria-label="more"
+        id="long-button"
+        aria-controls={open ? 'long-menu' : undefined}
+        aria-expanded={open ? 'true' : undefined}
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+        <MoreVertIcon />
+      </IconButton>
+
+      <Menu
+        id="long-menu"
+        MenuListProps={{
+          'aria-labelledby': 'long-button',
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right', // Align the menu to the right
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right', // Align the menu to the right
+        }}
+        slotProps={{
+          paper: {
+            style: {
+              maxHeight: ITEM_HEIGHT * 4.5,
+              width: '20ch',
+            },
+          },
+        }}
+      >
+        {options.map((option) => (
+          <MenuItem key={option} onClick={handleClose}>
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  );
 }
-export default Header;

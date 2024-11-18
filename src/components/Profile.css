@@ -1,0 +1,17 @@
+.profile-container {
+    padding: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .profile-container .MuiTypography-root {
+    margin-right: 15px;
+  }
+  
+  .MuiButton-root {
+    padding: 0;
+    margin: 0;
+  }
+  

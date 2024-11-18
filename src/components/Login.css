@@ -92,3 +92,16 @@ body {
     transform: translateY(0);
   }
 }
+.signup-link {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+.link {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+}
+.link:hover {
+  text-decoration: underline;
+}
