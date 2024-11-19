@@ -2,57 +2,45 @@ import './customCss.css';
 import React, { useState } from 'react';
 import { GlobalProvider } from './context/GlobalState';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Header from './components/Header';
-import Balance from './components/Balance';
+import Balance from './components/Balance'; // Includes Header
 import IncomeExpances from './components/IncomeExpances';
 import TransectionList from './components/TransectionList';
 import AddTransections from './components/AddTransections';
 import Login from './components/Login';
 import SignUp from './components/SignUp'; // Import SignUp Component
-import Profile from './components/Profile';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const handleLogout = () => {
+    setLoggedIn(false); // Log the user out
+  };
+
   return (
     <GlobalProvider>
       <Router>
+        {loggedIn && <Balance onLogout={handleLogout} />} {/* Render Header and Balance */}
         <Routes>
-          {/* Default route: Login */}
+          {/* Login route */}
           <Route
             path="/"
             element={loggedIn ? <Navigate to="/dashboard" /> : <Login setLoggedIn={setLoggedIn} />}
           />
-          {/* Signup Route */}
+          {/* Signup route */}
           <Route
             path="/signup"
             element={loggedIn ? <Navigate to="/dashboard" /> : <SignUp />}
           />
-          
-          {/* Only show Header and app components when logged in */}
+          {/* Main dashboard */}
           <Route
             path="/dashboard"
-            element={loggedIn ? (
-              <>
-                <Header />
+            element={
+              loggedIn ? (
                 <Dashboard />
-              </>
-            ) : (
-              <Navigate to="/" />
-            )}
-          />
-
-          {/* Profile Route */}
-          <Route
-            path="/profile"
-            element={loggedIn ? (
-              <>
-                <Header />
-                <Profile />
-              </>
-            ) : (
-              <Navigate to="/" />
-            )}
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
         </Routes>
       </Router>
@@ -64,7 +52,6 @@ function App() {
 function Dashboard() {
   return (
     <div className="container">
-      <Balance />
       <IncomeExpances />
       <TransectionList />
       <AddTransections />

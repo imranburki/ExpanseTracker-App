@@ -1,70 +1,17 @@
-import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box } from '@mui/material';
+import React from 'react';
+import ExitToAppSharpIcon from '@mui/icons-material/ExitToAppSharp';
 
-const options = ['Profile', 'Setting', 'Logout'];
-
-const ITEM_HEIGHT = 48;
-
-export default function LongMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+function Header({ onLogout }) {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-      <IconButton
-        aria-label="more"
-        id="long-button"
-        aria-controls={open ? 'long-menu' : undefined}
-        aria-expanded={open ? 'true' : undefined}
-        aria-haspopup="true"
-        onClick={handleClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right', // Align the menu to the right
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right', // Align the menu to the right
-        }}
-        slotProps={{
-          paper: {
-            style: {
-              maxHeight: ITEM_HEIGHT * 4.5,
-              width: '20ch',
-            },
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem key={option} onClick={handleClose}>
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-    </Box>
+    <ExitToAppSharpIcon
+      onClick={onLogout}
+      style={{
+        cursor: 'pointer',
+        color: 'black',
+         fontSize: "medium",
+      }}
+    />
   );
 }
+
+export default Header;
