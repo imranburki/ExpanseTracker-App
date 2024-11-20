@@ -1,20 +1,38 @@
 import React, { useState, useContext } from 'react';
 import { GlobalContext } from '../context/GlobalState';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
 import './Login.css'; // Add this CSS file for styling
 
 export default function Login({ setLoggedIn }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { loginUser } = useContext(GlobalContext);
+  const navigate = useNavigate(); // Initialize navigate
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username === 'user' && password ==='password') {
-      loginUser({ username });
-      setLoggedIn(true);
-    } else {
-      alert('invalid Username or Password');
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        loginUser({ username: data.username }); // Use the username from the response
+        setLoggedIn(true);
+        navigate('/dashboard'); // Redirect to dashboard
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+      alert('An error occurred. Please try again.');
     }
   };
 
@@ -38,6 +56,7 @@ export default function Login({ setLoggedIn }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
+              required
             />
           </div>
           <div className="form-group">
@@ -47,6 +66,7 @@ export default function Login({ setLoggedIn }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
+              required
             />
           </div>
           <button className="login-btn" type="submit">

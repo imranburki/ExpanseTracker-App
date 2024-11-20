@@ -20,7 +20,7 @@ function Balance({ onLogout }) {
         <h3 style={{ margin: 0, fontSize: '1.5rem' }}>Take Control of Your Money</h3>
         <Header onLogout={onLogout} />
       </div>
-      <h2>${total}</h2>
+      <h2>Your Balance  ${total}</h2>
     </>
   );
 }

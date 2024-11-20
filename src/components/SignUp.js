@@ -6,19 +6,39 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate(); // Initialize useNavigate
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+      setError('Passwords do not match!');
       return;
     }
-    alert(`Account created successfully for ${username}`);
-    // Add registration logic here
 
-    // Redirect to login page after successful signup
-    navigate('/');
+    try {
+      // Send request to the backend
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Account created successfully for ${data.username}`);
+        // Redirect to login page after successful signup
+        navigate('/');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to create account. Please try again.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -26,6 +46,7 @@ export default function SignUp() {
       <div className="signup-card">
         <h2>Create an Account</h2>
         <form onSubmit={handleSubmit}>
+          {error && <div className="error-message">{error}</div>}
           <div className="form-group">
             <label>Username</label>
             <input
