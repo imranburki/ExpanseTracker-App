@@ -1,34 +1,57 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import AppReducer from './AppReducer';
+import axios from 'axios';
 
-// Initial state
+axios.defaults.baseURL = 'http://localhost:5000';
+
+
 const initialState = {
   transactions: [],
   user: null,
+  loading: true,
+  error: null,
 };
 
-// Create context
 export const GlobalContext = createContext(initialState);
 
-// Provider component
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  // Actions
-  function deleteTransaction(id) {
-    dispatch({
-      type: 'DELETE_TRANSACTION',
-      payload: id,
-    });
+  async function fetchTransactions() {
+    try {
+      const response = await axios.get('/transactions'); // Update endpoint if needed
+      dispatch({ type: 'FETCH_TRANSACTIONS_SUCCESS', payload: response.data });
+    } catch (error) {
+      dispatch({
+        type: 'FETCH_TRANSACTIONS_ERROR',
+        payload: error.response ? error.response.data : 'Server Error',
+      });
+    }
   }
 
-  function addTransaction(transaction) {
-    dispatch({
-      type: 'ADD_TRANSACTION',
-      payload: transaction,
-    });
+  async function addTransaction(transaction) {
+    try {
+      const response = await axios.get('http://localhost:5000/transactions'); // Adjust port if needed
+      dispatch({ type: 'ADD_TRANSACTION', payload: response.data });
+    } catch (error) {
+      dispatch({
+        type: 'ADD_TRANSACTION_ERROR',
+        payload: error.response ? error.response.data : 'Server Error',
+      });
+    }
   }
-
+  
+  async function deleteTransaction(id) {
+    try {
+      await axios.delete(`/transactions/${id}`); // Fix double slash issue
+      dispatch({ type: 'DELETE_TRANSACTION', payload: id });
+    } catch (error) {
+      dispatch({
+        type: 'DELETE_TRANSACTION_ERROR',
+        payload: error.response ? error.response.data : 'Server Error',
+      });
+    }
+  }
   function loginUser(user) {
     dispatch({
       type: 'LOGIN_USER',
@@ -36,30 +59,21 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
-  function logoutUser() {
-    dispatch({
-      type: 'LOGOUT_USER',
-    });
-  }
-
-  function registerUser(user) {
-    // Assuming registration adds the user (you could handle this via a backend).
-    dispatch({
-      type: 'REGISTER_USER',
-      payload: user,
-    });
-  }
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   return (
     <GlobalContext.Provider
       value={{
         transactions: state.transactions,
         user: state.user,
-        deleteTransaction,
+        loading: state.loading,
+        error: state.error,
+        fetchTransactions,
         addTransaction,
+        deleteTransaction,
         loginUser,
-        logoutUser,
-        registerUser,
       }}
     >
       {children}
