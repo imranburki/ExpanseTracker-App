@@ -1,8 +1,8 @@
 # Use an official Node runtime as a parent image
-FROM node:14
+FROM node:14 AS build
 
 # Set the working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -14,7 +14,13 @@ RUN npm install
 COPY . .
 
 # Expose the port your app runs on
-EXPOSE 3000
+# EXPOSE 3000
 
 # Run the application
-CMD [ "npm", "start" ]
+# CMD [ "npm", "start" ]
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD [ "nginx", "-g", "daemon off;"]
