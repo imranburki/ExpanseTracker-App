@@ -31,7 +31,7 @@ jobs:
              # Step4 Build Docker image
             - name: Build the Docker image
               run: |
-                docker build -t ${{secrets.DOCKERHUB_USERNAME}}/expancetrackerapp:latest
+                docker build -t ${{secrets.DOCKERHUB_USERNAME}}/expancetrackerapp:latest .
              # setp5 Push image to DockerHub registery
             - name: Push image to Docker Hub reg
               run: |
