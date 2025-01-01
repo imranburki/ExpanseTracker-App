@@ -46,7 +46,7 @@ export default function Login({ setLoggedIn }) {
             className="login-icon"
           />
           <h2>Welcome Back!</h2>
-          {/* <p>Login to access your account</p> */}
+          <p>Login to access your account</p>
         </div>
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
