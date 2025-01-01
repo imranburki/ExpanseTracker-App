@@ -16,7 +16,7 @@ jobs:
             - name: set up Docker buildx
               uses : docker/setup-buildx-action@v3
 
-              # step3 Login to Docker Hub
+              # step3 Debuggin 
             - name: Debug Secrets Access
               run: |
                 echo "Username: ${{ secrets.DOCKERHUB_USERNAME }}"
