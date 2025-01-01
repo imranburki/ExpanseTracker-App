@@ -1,6 +1,9 @@
 name: CICD pipeline for ExpanseTrakerApp
 
-on: push
+on: 
+  push:
+    branches:
+      features
 
 jobs:
     git-clone:
