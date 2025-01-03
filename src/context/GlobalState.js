@@ -19,27 +19,43 @@ export const GlobalProvider = ({ children }) => {
 
   async function fetchTransactions() {
     try {
-      const response = await axios.get('/transactions'); // Update endpoint if needed
+      const token = localStorage.getItem('token'); // Retrieve token from localStorage
+      console.log(`the token is ${token}`)
+      const response = await axios.get('/transactions', {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach token to headers
+        },
+      });
+  
       dispatch({ type: 'FETCH_TRANSACTIONS_SUCCESS', payload: response.data });
     } catch (error) {
+      console.error('Fetch transactions error:', error.response?.data || error.message);
       dispatch({
         type: 'FETCH_TRANSACTIONS_ERROR',
         payload: error.response ? error.response.data : 'Server Error',
       });
     }
   }
+  
 
   async function addTransaction(transaction) {
     try {
-      const response = await axios.get('http://localhost:5000/transactions'); // Adjust port if needed
+      const token = localStorage.getItem('token'); // Retrieve token
+      const response = await axios.post('/transactions', transaction, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach token to headers
+        },
+      });
       dispatch({ type: 'ADD_TRANSACTION', payload: response.data });
     } catch (error) {
+      console.error('Add transaction error:', error.response?.data || error.message);
       dispatch({
         type: 'ADD_TRANSACTION_ERROR',
         payload: error.response ? error.response.data : 'Server Error',
       });
     }
   }
+  
   
   async function deleteTransaction(id) {
     try {
@@ -59,9 +75,9 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
+  // useEffect(() => {
+  //   fetchTransactions();
+  // }, []);
 
   return (
     <GlobalContext.Provider
@@ -70,9 +86,9 @@ export const GlobalProvider = ({ children }) => {
         user: state.user,
         loading: state.loading,
         error: state.error,
-        fetchTransactions,
-        addTransaction,
-        deleteTransaction,
+       // fetchTransactions,
+        //addTransaction,
+        //deleteTransaction,
         loginUser,
       }}
     >
