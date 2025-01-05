@@ -17,13 +17,17 @@ export default function Login({ setLoggedIn }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          
         },
         body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        loginUser({ username: data.username }); // Use the username from the response
+        console.log('Inside respone.ok!!!')
+        console.log('data of data.username ',response)
+        loginUser({username, password})
+        //loginUser({ username: data.username }); // Use the username from the response
         setLoggedIn(true);
         navigate('/dashboard'); // Redirect to dashboard
       } else {

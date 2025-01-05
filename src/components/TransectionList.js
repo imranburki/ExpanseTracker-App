@@ -9,9 +9,10 @@ export default function TransectionList() {
     <>
       <h3>History</h3>
       <ul className="list">
-        {transactions.map(transaction =>(
-            <Transection key={transaction.id} transaction={transaction}/>
-        ))}
+      {transactions.map(transaction => (
+  <Transection key={transaction._id} transaction={transaction} />
+))}
+
       
       </ul>
     </>
