@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 import AppReducer from './AppReducer';
 import axios from 'axios';
 
@@ -24,12 +24,12 @@ export const GlobalProvider = ({ children }) => {
         throw new Error('No token found. Please log in again.');
       }
 
-      const response = await axios.get('/user/transactions', {
+      const response = await axios.get('/transactions', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log('here is the call...',response)
       dispatch({ type: 'FETCH_TRANSACTIONS_SUCCESS', payload: response.data });
     } catch (error) {
       console.error('Fetch user transactions error:', error.response?.data || error.message);
@@ -48,6 +48,7 @@ try {
       Authorization: `Bearer ${token}`, // Attach token to headers
     },
   });
+  console.log('here in addTranscation...')
   dispatch({ type: 'ADD_TRANSACTION', payload: response.data });
 } catch (error) {
   console.error('Add transaction error:', error.response?.data || error.message);
@@ -58,38 +59,76 @@ try {
 }
 }
 
-  // ✅ Login User
-  async function loginUser(credentials) {
-    try {
-      console.log('Credentials being sent:', credentials);
-  
-      const response = await axios.post('/users/login', credentials, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-  
-      console.log('Response from login:', response.data);
-  
-      const { token, username } = response.data;
-  
-      if (token) {
-        localStorage.setItem('token', token); // Save token in localStorage
-        dispatch({
-          type: 'LOGIN_USER',
-          payload: { username },
-        });
-      } else {
-        throw new Error('Token not received');
-      }
-    } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
-      dispatch({
-        type: 'FETCH_TRANSACTIONS_ERROR',
-        payload: error.response ? error.response.data : 'Server Error',
-      });
-    }
-  }
-      
+async function deleteTransaction(id) {
+  try {
+    const token = localStorage.getItem('token'); // Retrieve token
+    await axios.delete(`/transactions/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
+    // ✅ Dispatch an action to update local state
+    dispatch({
+      type: 'DELETE_TRANSACTION',
+      payload: id,
+    });
+  } catch (error) {
+    console.error('Delete transaction error:', error.response?.data || error.message);
+    dispatch({
+      type: 'DELETE_TRANSACTION_ERROR',
+      payload: error.response ? error.response.data : 'Server Error',
+    });
+  }
+}
+
+
+// async function deleteTransaction(id) {
+//   try {
+//     console.log('the id is ',id)
+//     await axios.delete(`/transactions/${id}`); // Fix double slash issue
+//     dispatch({ type: 'DELETE_TRANSACTION', payload: id });
+//   } catch (error) {
+//     dispatch({
+//       type: 'DELETE_TRANSACTION_ERROR',
+//       payload: error.response ? error.response.data : 'Server Error',
+//     });
+//   }
+// }
+  // ✅ Login User
+async function loginUser(credentials) {
+  try {
+    console.log('Credentials being sent:', credentials);
+
+    const response = await axios.post('/users/login', credentials, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    console.log('Response from login:', response.data);
+
+    const { token, username } = response.data;
+
+    if (token) {
+      localStorage.setItem('token', token); // Save token in localStorage
+
+      dispatch({
+        type: 'LOGIN_USER',
+        payload: { username },
+      });
+
+      // ✅ Fetch user transactions immediately after login
+      await fetchUserTransactions();  
+    } else {
+      throw new Error('Token not received');
+    }
+  } catch (error) {
+    console.error('Login error:', error.response?.data || error.message);
+    dispatch({
+      type: 'FETCH_TRANSACTIONS_ERROR',
+      payload: error.response ? error.response.data : 'Server Error',
+    });
+  }
+}
   return (
     <GlobalContext.Provider
       value={{
@@ -97,8 +136,9 @@ try {
         user: state.user,
         loading: state.loading,
         error: state.error,
-        //fetchUserTransactions,
+        fetchUserTransactions,
         addTransaction,
+        deleteTransaction,
         loginUser,
       }}
     >
