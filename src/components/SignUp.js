@@ -19,7 +19,7 @@ export default function SignUp() {
 
     try {
       // Send request to the backend
-      const response = await fetch('http://localhost:5000/users/signup', {
+      const response = await fetch('http://52.205.87.20:5000/users/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

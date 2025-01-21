@@ -13,7 +13,7 @@ export default function Login({ setLoggedIn }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/users/login', {
+      const response = await fetch('http://52.205.87.20:5000/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

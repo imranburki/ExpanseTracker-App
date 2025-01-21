@@ -2,7 +2,7 @@ import React, { createContext, useReducer, useEffect } from 'react';
 import AppReducer from './AppReducer';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://52.205.87.20:5000';
 
 const initialState = {
   transactions: [],
